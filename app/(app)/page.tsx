@@ -1,5 +1,7 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,9 +19,9 @@ export default async function Home() {
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800">
         <div className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
-        <div className="text-xl font-bold text-zinc-900 dark:text-white">{nav?.logo}</div>
+        <a href="#" className="text-xl font-bold text-zinc-900 dark:text-white">{nav?.logo}</a>
         <div className="flex gap-6">
-          {nav?.links?.map((link, index) => (
+          {nav?.links?.map((link: { href: string; label: string }, index: number) => (
             <a
               key={index}
               href={link.href}
@@ -40,7 +42,7 @@ export default async function Home() {
         <p className="text-xl text-zinc-600 dark:text-zinc-400 mb-8 max-w-2xl mx-auto">
           {hero?.description}
         </p>
-        <div className="flex gap-4 justify-center">
+        <div className="flex gap-4 justify-center mb-12">
           <a
             href={hero?.primaryButton?.href}
             className="px-6 py-3 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors"
@@ -54,6 +56,17 @@ export default async function Home() {
             {hero?.secondaryButton?.label}
           </a>
         </div>
+        {hero?.image && typeof hero.image === 'object' && 'url' in hero.image && (
+          <div className="relative w-full max-w-4xl mx-auto aspect-video rounded-xl overflow-hidden shadow-2xl">
+            <Image
+              src={hero.image.url as string}
+              alt={(hero.image as { alt?: string }).alt || 'Hero image'}
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+        )}
       </section>
 
       {/* Features Section */}
@@ -63,16 +76,33 @@ export default async function Home() {
             {features?.title}
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {features?.items?.map((feature, index) => (
-              <div key={index} className="p-6 bg-white dark:bg-zinc-800 rounded-xl">
-                <div className="w-12 h-12 bg-zinc-900 dark:bg-white rounded-lg flex items-center justify-center mb-4">
-                  <span className="text-white dark:text-zinc-900 text-xl">{index + 1}</span>
+            {features?.items?.map((feature: { slug?: string; title: string; description: string; image?: unknown }, index: number) => (
+              <Link
+                key={index}
+                href={`/features/${feature.slug}`}
+                className="bg-white dark:bg-zinc-800 rounded-xl hover:shadow-lg transition-shadow overflow-hidden"
+              >
+                {feature.image && typeof feature.image === 'object' && 'url' in feature.image ? (
+                  <div className="relative w-full aspect-video">
+                    <Image
+                      src={feature.image.url as string}
+                      alt={(feature.image as { alt?: string }).alt || feature.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-full aspect-video bg-zinc-100 dark:bg-zinc-700 flex items-center justify-center">
+                    <span className="text-zinc-400 dark:text-zinc-500 text-4xl font-bold">{index + 1}</span>
+                  </div>
+                )}
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold text-zinc-900 dark:text-white mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-zinc-600 dark:text-zinc-400">{feature.description}</p>
                 </div>
-                <h3 className="text-xl font-semibold text-zinc-900 dark:text-white mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-zinc-600 dark:text-zinc-400">{feature.description}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

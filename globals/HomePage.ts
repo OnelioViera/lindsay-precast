@@ -45,6 +45,12 @@ export const HomePage: GlobalConfig = {
       label: 'Hero Section',
       fields: [
         {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Hero Image',
+        },
+        {
           name: 'title',
           type: 'text',
           required: true,
@@ -117,15 +123,33 @@ export const HomePage: GlobalConfig = {
               required: true,
             },
             {
+              name: 'slug',
+              type: 'text',
+              admin: {
+                description: 'URL-friendly identifier (e.g., "fast-performance")',
+              },
+            },
+            {
+              name: 'image',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Feature Image',
+            },
+            {
               name: 'description',
               type: 'textarea',
               required: true,
             },
+            {
+              name: 'content',
+              type: 'richText',
+              label: 'Full Page Content',
+            },
           ],
           defaultValue: [
-            { title: 'Fast Performance', description: 'Built with Next.js for optimal loading speeds and SEO.' },
-            { title: 'Modern Design', description: 'Clean and responsive design with Tailwind CSS.' },
-            { title: 'Easy to Customize', description: "Simple structure that's easy to modify and extend." },
+            { title: 'Fast Performance', slug: 'fast-performance', description: 'Built with Next.js for optimal loading speeds and SEO.' },
+            { title: 'Modern Design', slug: 'modern-design', description: 'Clean and responsive design with Tailwind CSS.' },
+            { title: 'Easy to Customize', slug: 'easy-to-customize', description: "Simple structure that's easy to modify and extend." },
           ],
         },
       ],

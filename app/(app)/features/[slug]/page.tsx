@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { RichText } from '@payloadcms/richtext-lexical/react'
+import { Navbar } from '../../components/Navbar'
+import { ScrollReveal } from '../../components/ScrollReveal'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,24 +29,7 @@ export default async function FeaturePage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-950">
-      <nav className="sticky top-0 z-50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800">
-        <div className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
-          <Link href="/" className="text-xl font-bold text-zinc-900 dark:text-white">
-            {homePage.nav?.logo}
-          </Link>
-          <div className="flex gap-6">
-            {homePage.nav?.links?.map((link: { href: string; label: string }, index: number) => (
-              <a
-                key={index}
-                href={link.href}
-                className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-        </div>
-      </nav>
+      <Navbar logo={homePage.nav?.logo} links={homePage.nav?.links} transparent />
 
       {feature.image && typeof feature.image === 'object' && 'url' in feature.image && (
         <div className="relative w-full h-[50vh] min-h-[400px]">
@@ -75,7 +60,7 @@ export default async function FeaturePage({ params }: Props) {
 
       <main className="px-6 py-16 max-w-4xl mx-auto">
         {!(feature.image && typeof feature.image === 'object' && 'url' in feature.image) && (
-          <>
+          <ScrollReveal animation="fade-up">
             <Link
               href="/#features"
               className="inline-flex items-center text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white mb-8 transition-colors"
@@ -88,19 +73,23 @@ export default async function FeaturePage({ params }: Props) {
             <h1 className="text-4xl md:text-5xl font-bold text-zinc-900 dark:text-white mb-8">
               {feature.title}
             </h1>
-          </>
+          </ScrollReveal>
         )}
 
-        <div className="bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-8 mb-12">
-          <p className="text-xl text-zinc-700 dark:text-zinc-300 leading-relaxed">
-            {feature.description}
-          </p>
-        </div>
+        <ScrollReveal animation="fade-up">
+          <div className="bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-8 mb-12">
+            <p className="text-xl text-zinc-700 dark:text-zinc-300 leading-relaxed">
+              {feature.description}
+            </p>
+          </div>
+        </ScrollReveal>
 
         {feature.content && (
-          <article className="prose prose-lg dark:prose-invert prose-zinc max-w-none prose-headings:font-bold prose-a:text-zinc-900 dark:prose-a:text-white prose-img:rounded-xl">
-            <RichText data={feature.content} />
-          </article>
+          <ScrollReveal animation="fade-up" delay="0.1s">
+            <article className="prose prose-lg dark:prose-invert prose-zinc max-w-none prose-headings:font-bold prose-a:text-zinc-900 dark:prose-a:text-white prose-img:rounded-xl">
+              <RichText data={feature.content} />
+            </article>
+          </ScrollReveal>
         )}
       </main>
 
